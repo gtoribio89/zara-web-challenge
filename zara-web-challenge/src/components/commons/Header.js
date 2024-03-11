@@ -1,17 +1,30 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React from "react";
+import { Link } from "react-router-dom";
+import Logo from "../../assets/vector.png";
+import FavIcon from "../../assets/heart-default.png";
 
-function Header() {
+const componentName = "Header-";
+
+function Header(props) {
   return (
-    <div>
-      <h1>Header</h1>
-      <nav>
-        <ul>
-            <li><Link to="/">Home</Link></li>
-            <li><Link to="/about">About</Link></li>
-            <li><Link to="/contact">Contact</Link></li>
-        </ul>
-      </nav>
+    <div className={`${componentName}-container`}>
+      <div className={`${componentName}-logo-wrapper`}>
+        <Link className={`${componentName}-logo-link`} to="/">
+          <img
+            className={`${componentName}-logo-image`}
+            src={Logo}
+            alt="Logo png"
+          />
+        </Link>
+      </div>
+      <div className={`${componentName}-favourites-wrapper`}>
+        <img
+          className={`${componentName}-favourites-icon`}
+          src={FavIcon}
+          alt="Favourites icon png"
+        />
+        <div className={`${componentName}-favourites-count`}>0</div>
+      </div>
     </div>
   );
 }

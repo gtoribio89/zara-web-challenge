@@ -1,1 +1,0 @@
-# zara-web-challenge

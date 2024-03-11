@@ -1,13 +1,15 @@
 import React from "react";
+import Header from "./commons/Header";
 
-function Favorites(props) {
+function Favourites(props) {
   return (
     <div>
-      <h1>Favorites</h1>
+      <Header />
+      <h1>Favourites</h1>
       <h2>Hola, soy un componente básico de React</h2>
       <p>Este es un componente funcional que recibe props: {props.mensaje}</p>
     </div>
   );
 }
 
-export default Favorites;
+export default Favourites;

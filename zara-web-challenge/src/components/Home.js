@@ -9,6 +9,7 @@ const componentName = "Home-";
 function Home(props) {
   const [data, setData] = useState(null);
   const [filtered, setFiltered] = useState([]);
+  const [favoriteCount, setFavoriteCount] = useState(0);
 
   useEffect(() => {
     fetchData()
@@ -29,9 +30,17 @@ function Home(props) {
     return <p>Cargando datos...</p>;
   }
 
+  const handleToggleFavorite = (isFavorite) => {
+    if (isFavorite) {
+      setFavoriteCount((prevCount) => prevCount + 1);
+    } else {
+      setFavoriteCount((prevCount) => prevCount - 1);
+    }
+  };
+
   return (
     <div className="main-container">
-      <Header />
+      <Header favoritesCounter={favoriteCount} />
       <div className={`${componentName}-container`}>
         <div className={`${componentName}-searchbar-container`}>
           <SearchBar
@@ -43,7 +52,11 @@ function Home(props) {
         {filtered.length > 0 ? (
           <div className={`${componentName}-product-list-container`}>
             {filtered.map((item, index) => (
-              <Card key={index} data={item} />
+              <Card
+                key={index}
+                data={item}
+                onToggleFavorite={handleToggleFavorite}
+              />
             ))}
           </div>
         ) : (

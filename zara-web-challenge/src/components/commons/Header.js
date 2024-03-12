@@ -6,6 +6,8 @@ import FavIcon from "../../assets/heart-filled.png";
 const componentName = "Header-";
 
 function Header(props) {
+  const { favoritesCounter } = props;
+
   return (
     <div className={`${componentName}-container`}>
       <div className={`${componentName}-logo-wrapper`}>
@@ -23,7 +25,9 @@ function Header(props) {
           src={FavIcon}
           alt="Favourites icon png"
         />
-        <div className={`${componentName}-favourites-count`}>0</div>
+        <div className={`${componentName}-favourites-count`}>
+          {favoritesCounter}
+        </div>
       </div>
     </div>
   );

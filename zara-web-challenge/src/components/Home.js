@@ -13,6 +13,7 @@ function Home(props) {
   const [favoriteCount, setFavoriteCount] = useState(0);
   const [favorites, setFavorites] = useState([]);
   const [searchText, setSearchText] = useState("");
+  const [isFavoritesActive, setIsFavoritesActive] = useState(false);
 
   useEffect(() => {
     fetchData()
@@ -27,6 +28,7 @@ function Home(props) {
 
   const handleFilteredResults = (filteredResults) => {
     setFiltered(filteredResults);
+    setIsFavoritesActive(false); // Desactivar el filtro de favoritos al cambiar los filtros
   };
 
   const handleToggleFavorite = (isFavorite, item) => {
@@ -41,6 +43,7 @@ function Home(props) {
 
   const handleShowFavorites = () => {
     setFiltered(favorites);
+    setIsFavoritesActive(true); // Activar el filtro de favoritos
   };
 
   const clearSearchText = () => {
@@ -53,16 +56,19 @@ function Home(props) {
       <Header
         favoritesCounter={favoriteCount}
         onShowFavorites={handleShowFavorites}
-        clearSearchText={clearSearchText} // Pasar la función para limpiar el texto de búsqueda
+        clearSearchText={clearSearchText}
       />
       <div className={`${componentName}-container`}>
+        {isFavoritesActive && (
+          <p className={`${componentName}-favorites-title`}>favorites</p>
+        )}
         <div className={`${componentName}-searchbar-container`}>
           <SearchBar
             data={data ? data.data.results : []}
             setFiltered={handleFilteredResults}
             filtered={filtered}
             searchText={searchText}
-            setSearchText={setSearchText} // Pasar el estado y la función para cambiar el texto de búsqueda
+            setSearchText={setSearchText}
           />
         </div>
         {filtered.length > 0 ? (

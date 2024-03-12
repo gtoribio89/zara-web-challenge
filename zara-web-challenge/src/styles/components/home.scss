@@ -1,5 +1,16 @@
 .Home--container {
   margin-top: 94px;
+  .Home--favorites-title {
+    margin: 0;
+    padding: 24px 12px 24px 12px;
+    font-family: $font-family-primary;
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 28px;
+    letter-spacing: 0em;
+    text-align: left;
+    text-transform: uppercase;
+  }
   .Home--searchbar-container {
     @media (min-width: $medium) {
       margin-top: 124px;

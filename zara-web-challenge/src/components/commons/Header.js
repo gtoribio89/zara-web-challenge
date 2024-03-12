@@ -31,15 +31,15 @@ function Header(props) {
         </Link>
       </div>
       <div
-        className={`${componentName}-favourites-wrapper`}
+        className={`${componentName}-favorites-wrapper`}
         onClick={onShowFavorites}
       >
         <img
-          className={`${componentName}-favourites-icon`}
+          className={`${componentName}-favorites-icon`}
           src={FavIcon}
-          alt="Favourites icon png"
+          alt="Favorites icon png"
         />
-        <div className={`${componentName}-favourites-count`}>
+        <div className={`${componentName}-favorites-count`}>
           {favoritesCounter}
         </div>
       </div>

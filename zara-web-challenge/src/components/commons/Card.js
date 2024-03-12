@@ -31,13 +31,13 @@ function Card(props) {
           <p className={`${componentName}-character-name`}>{data.name}</p>
         </div>
         <div
-          className={`${componentName}-favourite-container`}
+          className={`${componentName}-favorites-container`}
           onClick={toggleFavorite}
         >
           <img
-            className={`${componentName}-favourite-icon`}
+            className={`${componentName}-favorites-icon`}
             src={isFavorite ? FavIconFilled : FavIcon}
-            alt="Favourites icon png"
+            alt="Favorites icon png"
           />
         </div>
       </div>

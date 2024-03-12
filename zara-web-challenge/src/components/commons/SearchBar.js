@@ -1,14 +1,20 @@
-import React, { useState } from "react";
+// SearchBar.js
+import React, { useState, useEffect } from "react";
 import SearchIcon from "../../assets/search-icon.png";
 
 const componentName = "SearchBar-";
 
-function SearchBar({ data, setFiltered, filtered }) {
-  const [query, setQuery] = useState("");
+function SearchBar({ data, setFiltered, filtered, searchText, setSearchText }) {
+  const [query, setQuery] = useState(searchText);
+
+  useEffect(() => {
+    setQuery(searchText); // Actualizar el estado `query` cuando cambie el texto de búsqueda
+  }, [searchText]);
 
   const handleChange = (event) => {
     const valor = event.target.value;
     setQuery(valor);
+    setSearchText(valor); // Actualizar el texto de búsqueda en el estado
 
     const filtered = data.filter((item) =>
       item.name.toLowerCase().includes(valor.toLowerCase())

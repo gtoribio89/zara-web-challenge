@@ -1,5 +1,4 @@
-// En Home.js
-
+// Home.js
 import React, { useState, useEffect } from "react";
 import Header from "./commons/Header";
 import SearchBar from "./commons/SearchBar";
@@ -13,6 +12,7 @@ function Home(props) {
   const [filtered, setFiltered] = useState([]);
   const [favoriteCount, setFavoriteCount] = useState(0);
   const [favorites, setFavorites] = useState([]);
+  const [searchText, setSearchText] = useState("");
 
   useEffect(() => {
     fetchData()
@@ -43,11 +43,17 @@ function Home(props) {
     setFiltered(favorites);
   };
 
+  const clearSearchText = () => {
+    setSearchText("");
+    setFiltered(data ? data.data.results : []); // Resetear los filtros de búsqueda
+  };
+
   return (
     <div className="main-container">
       <Header
         favoritesCounter={favoriteCount}
         onShowFavorites={handleShowFavorites}
+        clearSearchText={clearSearchText} // Pasar la función para limpiar el texto de búsqueda
       />
       <div className={`${componentName}-container`}>
         <div className={`${componentName}-searchbar-container`}>
@@ -55,6 +61,8 @@ function Home(props) {
             data={data ? data.data.results : []}
             setFiltered={handleFilteredResults}
             filtered={filtered}
+            searchText={searchText}
+            setSearchText={setSearchText} // Pasar el estado y la función para cambiar el texto de búsqueda
           />
         </div>
         {filtered.length > 0 ? (
@@ -65,7 +73,7 @@ function Home(props) {
                 data={item}
                 isFavorite={favorites.some(
                   (favorite) => favorite.id === item.id
-                )} // Aquí se verifica si el elemento actual está en la lista de favoritos
+                )}
                 onToggleFavorite={(isFavorite) =>
                   handleToggleFavorite(isFavorite, item)
                 }

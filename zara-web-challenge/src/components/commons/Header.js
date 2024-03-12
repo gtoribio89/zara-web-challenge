@@ -1,5 +1,4 @@
-// En Header.js
-
+// Header.js
 import React from "react";
 import { Link } from "react-router-dom";
 import Logo from "../../assets/vector.png";
@@ -8,12 +7,22 @@ import FavIcon from "../../assets/heart-filled.png";
 const componentName = "Header-";
 
 function Header(props) {
-  const { favoritesCounter, onShowFavorites } = props;
+  const { favoritesCounter, onShowFavorites, clearSearchText } = props;
+
+  const handleLogoClick = () => {
+    if (typeof clearSearchText === "function") {
+      clearSearchText(); // Limpiar el texto de búsqueda
+    }
+  };
 
   return (
     <div className={`${componentName}-container`}>
       <div className={`${componentName}-logo-wrapper`}>
-        <Link className={`${componentName}-logo-link`} to="/">
+        <Link
+          className={`${componentName}-logo-link`}
+          to="/"
+          onClick={handleLogoClick}
+        >
           <img
             className={`${componentName}-logo-image`}
             src={Logo}

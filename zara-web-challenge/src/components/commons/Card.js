@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+// En Card.js
+
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import FavIcon from "../../assets/heart-default.png";
 import FavIconFilled from "../../assets/heart-filled.png";
@@ -6,12 +8,10 @@ import FavIconFilled from "../../assets/heart-filled.png";
 const componentName = "Card-";
 
 function Card(props) {
-  const { data, onToggleFavorite } = props;
-  const [isFavorite, setIsFavorite] = useState(false);
+  const { data, isFavorite, onToggleFavorite } = props;
 
   const toggleFavorite = () => {
-    setIsFavorite(!isFavorite);
-    onToggleFavorite(!isFavorite);
+    onToggleFavorite(!isFavorite, data);
   };
 
   return (
@@ -36,7 +36,7 @@ function Card(props) {
         >
           <img
             className={`${componentName}-favourite-icon`}
-            src={!isFavorite ? FavIcon : FavIconFilled}
+            src={isFavorite ? FavIconFilled : FavIcon}
             alt="Favourites icon png"
           />
         </div>

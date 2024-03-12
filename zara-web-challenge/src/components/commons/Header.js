@@ -1,3 +1,5 @@
+// En Header.js
+
 import React from "react";
 import { Link } from "react-router-dom";
 import Logo from "../../assets/vector.png";
@@ -6,7 +8,7 @@ import FavIcon from "../../assets/heart-filled.png";
 const componentName = "Header-";
 
 function Header(props) {
-  const { favoritesCounter } = props;
+  const { favoritesCounter, onShowFavorites } = props;
 
   return (
     <div className={`${componentName}-container`}>
@@ -19,7 +21,10 @@ function Header(props) {
           />
         </Link>
       </div>
-      <div className={`${componentName}-favourites-wrapper`}>
+      <div
+        className={`${componentName}-favourites-wrapper`}
+        onClick={onShowFavorites}
+      >
         <img
           className={`${componentName}-favourites-icon`}
           src={FavIcon}

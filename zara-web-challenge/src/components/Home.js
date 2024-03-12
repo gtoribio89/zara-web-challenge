@@ -1,3 +1,5 @@
+// En Home.js
+
 import React, { useState, useEffect } from "react";
 import Header from "./commons/Header";
 import SearchBar from "./commons/SearchBar";
@@ -10,6 +12,7 @@ function Home(props) {
   const [data, setData] = useState(null);
   const [filtered, setFiltered] = useState([]);
   const [favoriteCount, setFavoriteCount] = useState(0);
+  const [favorites, setFavorites] = useState([]);
 
   useEffect(() => {
     fetchData()
@@ -26,25 +29,30 @@ function Home(props) {
     setFiltered(filteredResults);
   };
 
-  if (!data) {
-    return <p>Cargando datos...</p>;
-  }
-
-  const handleToggleFavorite = (isFavorite) => {
+  const handleToggleFavorite = (isFavorite, item) => {
     if (isFavorite) {
       setFavoriteCount((prevCount) => prevCount + 1);
+      setFavorites([...favorites, item]);
     } else {
       setFavoriteCount((prevCount) => prevCount - 1);
+      setFavorites(favorites.filter((favorite) => favorite.id !== item.id));
     }
+  };
+
+  const handleShowFavorites = () => {
+    setFiltered(favorites);
   };
 
   return (
     <div className="main-container">
-      <Header favoritesCounter={favoriteCount} />
+      <Header
+        favoritesCounter={favoriteCount}
+        onShowFavorites={handleShowFavorites}
+      />
       <div className={`${componentName}-container`}>
         <div className={`${componentName}-searchbar-container`}>
           <SearchBar
-            data={data.data.results}
+            data={data ? data.data.results : []}
             setFiltered={handleFilteredResults}
             filtered={filtered}
           />
@@ -55,7 +63,12 @@ function Home(props) {
               <Card
                 key={index}
                 data={item}
-                onToggleFavorite={handleToggleFavorite}
+                isFavorite={favorites.some(
+                  (favorite) => favorite.id === item.id
+                )} // Aquí se verifica si el elemento actual está en la lista de favoritos
+                onToggleFavorite={(isFavorite) =>
+                  handleToggleFavorite(isFavorite, item)
+                }
               />
             ))}
           </div>

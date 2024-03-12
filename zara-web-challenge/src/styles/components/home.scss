@@ -1,0 +1,24 @@
+.Home--container {
+  .Home--searchbar-container {
+  }
+  .Home--product-list-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding: 0 16px;
+    grid-column-gap: 16px;
+    grid-row-gap: 16px;
+    overflow: auto;
+    @media (min-width: $small) {
+      grid-template-columns: 1fr 1fr 1fr;
+    }
+    @media (min-width: $medium) {
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+    }
+    @media (min-width: $large) {
+      grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+    }
+    @media (min-width: $x-large) {
+      grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+    }
+  }
+}

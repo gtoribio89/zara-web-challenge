@@ -1,0 +1,39 @@
+.Header--container {
+  position: fixed;
+  top: 0;
+  width: calc(100% - 32px);
+  display: flex;
+  justify-content: space-between;
+  background-color: $primary;
+  padding: 16px;
+  z-index: 2;
+  @media (min-width: $medium) {
+    width: calc(100% - 96px);
+  }
+  .Header--logo-wrapper {
+    background-color: $brand-main;
+    padding: 4px;
+    .Header--logo-image {
+      display: flex;
+      align-items: center;
+    }
+  }
+  .Header--favourites-wrapper {
+    display: flex;
+    align-items: center;
+    padding: 8px;
+    .Header--favourites-icon {
+      margin-right: 4px;
+    }
+    .Header--favourites-count {
+      margin-left: 4px;
+      font-family: $font-family-primary;
+      font-size: 16px;
+      line-height: 18.75px;
+      color: $secondary;
+    }
+  }
+  @media (min-width: $medium) {
+    padding: 16px 48px 16px 48px;
+  }
+}

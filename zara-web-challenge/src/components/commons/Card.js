@@ -1,6 +1,4 @@
-// En Card.js
-
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import FavIcon from "../../assets/heart-default.png";
 import FavIconFilled from "../../assets/heart-filled.png";

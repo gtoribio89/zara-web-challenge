@@ -4,12 +4,15 @@ import "./index.scss";
 import reportWebVitals from "./reportWebVitals";
 import { RouterProvider } from "react-router-dom";
 import { router } from "./utils/routes.js";
+import { FavoritesProvider } from "./components/commons/FavoritesContext.js";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <div>
-      <RouterProvider router={router} />
+      <FavoritesProvider>
+        <RouterProvider router={router} />
+      </FavoritesProvider>
     </div>
   </React.StrictMode>
 );

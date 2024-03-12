@@ -1,9 +1,8 @@
-// Home.js
 import React, { useState, useEffect } from "react";
 import Header from "./commons/Header";
 import SearchBar from "./commons/SearchBar";
 import Card from "./commons/Card";
-import { fetchData } from "../api";
+import { fetchCharactersData } from "../api/get-characters";
 
 const componentName = "Home-";
 
@@ -16,7 +15,7 @@ function Home(props) {
   const [isFavoritesActive, setIsFavoritesActive] = useState(false);
 
   useEffect(() => {
-    fetchData()
+    fetchCharactersData()
       .then((data) => {
         setData(data);
         setFiltered(data.data.results);
@@ -28,7 +27,7 @@ function Home(props) {
 
   const handleFilteredResults = (filteredResults) => {
     setFiltered(filteredResults);
-    setIsFavoritesActive(false); // Desactivar el filtro de favoritos al cambiar los filtros
+    setIsFavoritesActive(false);
   };
 
   const handleToggleFavorite = (isFavorite, item) => {
@@ -43,12 +42,12 @@ function Home(props) {
 
   const handleShowFavorites = () => {
     setFiltered(favorites);
-    setIsFavoritesActive(true); // Activar el filtro de favoritos
+    setIsFavoritesActive(true);
   };
 
   const clearSearchText = () => {
     setSearchText("");
-    setFiltered(data ? data.data.results : []); // Resetear los filtros de búsqueda
+    setFiltered(data ? data.data.results : []);
   };
 
   return (

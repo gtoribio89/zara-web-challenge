@@ -1,13 +1,15 @@
-export async function fetchData() {
-  const API_URL = "https://gateway.marvel.com:443/v1/public/characters";
+export async function fetchCharacterData() {
+  const API_URL = "https://gateway.marvel.com:443/v1/public/characters/";
   const API_KEY = "91927be2abd19fa7330a6925d65153fe";
   const HASH = "fc6000da46eeda867c2c7f33fb8b2127";
   const TIMESTAMP = "1000";
   const LIMIT = 50;
+  const ID = 1011334;
 
   try {
     const response = await fetch(
       API_URL +
+        ID +
         "?ts=" +
         TIMESTAMP +
         "&apikey=" +

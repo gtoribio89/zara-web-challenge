@@ -1,4 +1,3 @@
-// Header.js
 import React from "react";
 import { Link } from "react-router-dom";
 import Logo from "../../assets/vector.png";
@@ -11,7 +10,13 @@ function Header(props) {
 
   const handleLogoClick = () => {
     if (typeof clearSearchText === "function") {
-      clearSearchText(); // Limpiar el texto de búsqueda
+      clearSearchText();
+    }
+  };
+
+  const handleShowFavorites = () => {
+    if (typeof onShowFavorites === "function") {
+      onShowFavorites();
     }
   };
 
@@ -32,7 +37,7 @@ function Header(props) {
       </div>
       <div
         className={`${componentName}-favorites-wrapper`}
-        onClick={onShowFavorites}
+        onClick={handleShowFavorites}
       >
         <img
           className={`${componentName}-favorites-icon`}

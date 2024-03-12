@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import Logo from "../../assets/vector.png";
-import FavIcon from "../../assets/heart-default.png";
+import FavIcon from "../../assets/heart-filled.png";
 
 const componentName = "Header-";
 

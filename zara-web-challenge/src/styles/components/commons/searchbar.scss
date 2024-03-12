@@ -1,0 +1,45 @@
+.SearchBar--container {
+  padding: 12px 16px 12px 16px;
+  @media (min-width: $medium) {
+    padding: 12px 48px 12px 48px;
+  }
+  .SearchBar--search-main-container {
+    display: flex;
+    padding-bottom: 8px;
+    border-bottom: 1px solid $primary;
+    .SearchBar--search-icon-container {
+      margin-right: 12px;
+      .SearchBar--search-icon {
+        width: 12px;
+      }
+    }
+    .SearchBar--search-bar-container {
+      .SearchBar--search-bar {
+        font-family: $font-family-primary;
+        font-size: 16px;
+        font-weight: 400;
+        line-height: 19px;
+        letter-spacing: 0em;
+        text-align: left;
+        text-transform: uppercase;
+        border: none;
+        &:focus {
+          outline: none;
+        }
+      }
+    }
+  }
+  .SearchBar--search-count-container {
+    margin-top: 8px;
+    .SearchBar--search-count {
+      margin: 0;
+      font-family: $font-family-primary;
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 14px;
+      letter-spacing: 0em;
+      text-align: left;
+      text-transform: uppercase;
+    }
+  }
+}

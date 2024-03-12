@@ -1,5 +1,9 @@
 .Home--container {
+  margin-top: 94px;
   .Home--searchbar-container {
+    @media (min-width: $medium) {
+      margin-top: 124px;
+    }
   }
   .Home--product-list-container {
     display: grid;
@@ -12,6 +16,7 @@
       grid-template-columns: 1fr 1fr 1fr;
     }
     @media (min-width: $medium) {
+      padding: 0 48px;
       grid-template-columns: 1fr 1fr 1fr 1fr;
     }
     @media (min-width: $large) {

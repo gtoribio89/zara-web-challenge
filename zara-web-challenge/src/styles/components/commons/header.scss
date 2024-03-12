@@ -18,14 +18,15 @@
       align-items: center;
     }
   }
-  .Header--favourites-wrapper {
+  .Header--favorites-wrapper {
     display: flex;
     align-items: center;
     padding: 8px;
-    .Header--favourites-icon {
+    cursor: pointer;
+    .Header--favorites-icon {
       margin-right: 4px;
     }
-    .Header--favourites-count {
+    .Header--favorites-count {
       margin-left: 4px;
       font-family: $font-family-primary;
       font-size: 16px;

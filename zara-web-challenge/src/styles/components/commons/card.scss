@@ -7,6 +7,13 @@
       .Card--character-info-hover-effect {
         height: 100%;
       }
+      .Card--favorites-container {
+        cursor: pointer;
+        .Card--favorites-icon {
+          filter: brightness(0) invert(1) grayscale(1);
+          transition: filter 0.3s ease;
+        }
+      }
     }
   }
   .Card--character-image-container {
@@ -61,14 +68,10 @@
         text-transform: uppercase;
       }
     }
-    .Card--favourite-container {
+    .Card--favorites-container {
       z-index: 1;
-      .Card--favourite-icon {
+      .Card--favorites-icon {
         width: 12px;
-        &:hover {
-          filter: brightness(0) invert(1) grayscale(1);
-          transition: filter 0.3s ease;
-        }
       }
     }
   }

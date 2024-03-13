@@ -8,12 +8,27 @@ import { useFavorites } from "./commons/FavoritesContext";
 const componentName = "Home-";
 
 function Home(props) {
-  const [data, setData] = useState(null);
+  const [data, setData] = useState([]);
   const [filtered, setFiltered] = useState([]);
   const [searchText, setSearchText] = useState("");
   const [isFavoritesActive, setIsFavoritesActive] = useState(false);
 
   const { favoritesCounter, updateFavoritesCounter } = useFavorites();
+
+  const handleFilterData = (searchText) => {
+    if (isFavoritesActive) {
+      const favorites = JSON.parse(localStorage.getItem("favorites")) || [];
+      setFiltered(favorites);
+    } else {
+      if (Array.isArray(data)) {
+        // Verifica que data sea un array
+        const filteredResults = data.filter((item) =>
+          item.name.toLowerCase().includes(searchText.toLowerCase())
+        );
+        setFiltered(filteredResults);
+      }
+    }
+  };
 
   useEffect(() => {
     fetchCharactersData()
@@ -27,18 +42,8 @@ function Home(props) {
   }, []);
 
   useEffect(() => {
-    if (isFavoritesActive) {
-      const favorites = JSON.parse(localStorage.getItem("favorites")) || [];
-      setFiltered(favorites);
-    } else {
-      const filteredResults = data
-        ? data.data.results.filter((item) =>
-            item.name.toLowerCase().includes(searchText.toLowerCase())
-          )
-        : [];
-      setFiltered(filteredResults);
-    }
-  }, [data, searchText, isFavoritesActive]);
+    handleFilterData(searchText);
+  }, [searchText, isFavoritesActive]);
 
   const handleToggleFavorite = (isFavorite, item) => {
     const favorites = JSON.parse(localStorage.getItem("favorites")) || [];
@@ -64,6 +69,7 @@ function Home(props) {
         favoritesCounter={favoritesCounter}
         onShowFavorites={handleShowFavorites}
         clearSearchText={handleClearSearchText}
+        isFavoritesActive={isFavoritesActive} // Agregar isFavoritesActive como prop
       />
       <div className={`${componentName}-container`}>
         {isFavoritesActive && (
@@ -71,13 +77,9 @@ function Home(props) {
         )}
         <div className={`${componentName}-searchbar-container`}>
           <SearchBar
-            data={data ? data.data.results : []}
-            setFiltered={setFiltered}
-            filtered={filtered}
             searchText={searchText}
             setSearchText={setSearchText}
-            isFavoritesActive={isFavoritesActive} // Propiedad añadida
-            favoritesCounter={favoritesCounter} // Propiedad añadida
+            handleFilterData={handleFilterData}
           />
         </div>
         {filtered.length > 0 ? (
@@ -96,6 +98,7 @@ function Home(props) {
                 onToggleFavorite={(isFavorite) =>
                   handleToggleFavorite(isFavorite, item)
                 }
+                isFavoritesActive={isFavoritesActive} // Pasar isFavoritesActive como prop
               />
             ))}
           </div>

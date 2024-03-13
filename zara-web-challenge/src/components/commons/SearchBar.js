@@ -1,44 +1,20 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useCallback } from "react";
 import SearchIcon from "../../assets/search-icon.png";
 
 const componentName = "SearchBar-";
 
-function SearchBar({
-  data,
-  setFiltered,
-  searchText,
-  setSearchText,
-  isFavoritesActive,
-  favoritesCounter,
-}) {
-  const [query, setQuery] = useState(searchText);
-  const [filtered, setFilteredResults] = useState([]);
+function SearchBar({ searchText, setSearchText, handleFilterData }) {
+  const handleChange = (event) => {
+    const value = event.target.value;
+    setSearchText(value);
+  };
+
+  // Utilizamos useCallback para envolver handleFilterData y asegurarnos de que no cambie en cada renderizado
+  const memoizedHandleFilterData = useCallback(handleFilterData, []);
 
   useEffect(() => {
-    setQuery(searchText);
-    filterData(searchText);
-  }, [searchText, data, setFiltered, isFavoritesActive]);
-
-  const handleChange = (event) => {
-    const valor = event.target.value;
-    setQuery(valor);
-    setSearchText(valor);
-    filterData(valor);
-  };
-
-  const filterData = (searchText) => {
-    if (isFavoritesActive) {
-      // Cuando los favoritos están activos, no es necesario filtrar los datos
-      setFilteredResults(data);
-    } else {
-      // Cuando los favoritos no están activos, filtramos los datos según el texto de búsqueda
-      const filteredData = data.filter((item) =>
-        item.name.toLowerCase().includes(searchText.toLowerCase())
-      );
-      setFilteredResults(filteredData);
-      setFiltered(filteredData);
-    }
-  };
+    memoizedHandleFilterData(searchText);
+  }, [searchText, memoizedHandleFilterData]);
 
   return (
     <div className={`${componentName}-container`}>
@@ -54,20 +30,11 @@ function SearchBar({
           <input
             type="text"
             placeholder="search a character..."
-            value={query}
+            value={searchText}
             onChange={handleChange}
             className={`${componentName}-search-bar`}
           />
         </div>
-      </div>
-      <div className={`${componentName}-search-count-container`}>
-        <p className={`${componentName}-search-count`}>
-          {isFavoritesActive
-            ? `${favoritesCounter} favorites`
-            : filtered.length === 1
-            ? `${filtered.length} result`
-            : `${filtered.length} results`}
-        </p>
       </div>
     </div>
   );

@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import Logo from "../../assets/vector.png";
 import FavIcon from "../../assets/heart-filled.png";
 
@@ -8,6 +8,10 @@ const componentName = "Header-";
 function Header(props) {
   const { favoritesCounter, onShowFavorites, clearSearchText } = props;
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // Agregar isFavoritesActive al destructuring
+  const { isFavoritesActive } = props;
 
   const handleLogoClick = () => {
     navigate("/");
@@ -17,9 +21,13 @@ function Header(props) {
   };
 
   const handleShowFavorites = () => {
-    if (typeof onShowFavorites === "function") {
-      onShowFavorites(true);
-      navigate("/"); // Navegar a la ruta raíz después de mostrar favoritos
+    if (location.pathname === "/") {
+      // Solo activar onShowFavorites si no estamos en la página de favoritos y la función está definida
+      if (!isFavoritesActive && typeof onShowFavorites === "function") {
+        onShowFavorites(true);
+      }
+    } else {
+      navigate("/");
     }
   };
 

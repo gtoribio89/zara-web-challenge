@@ -1,3 +1,4 @@
+// Card.js
 import React from "react";
 import { Link } from "react-router-dom";
 import FavIcon from "../../assets/heart-default.png";
@@ -6,7 +7,7 @@ import FavIconFilled from "../../assets/heart-filled.png";
 const componentName = "Card-";
 
 function Card(props) {
-  const { data, isFavorite, onToggleFavorite } = props;
+  const { data, isFavorite, onToggleFavorite, isFavoritesActive } = props;
 
   const toggleFavorite = () => {
     onToggleFavorite(!isFavorite, data);

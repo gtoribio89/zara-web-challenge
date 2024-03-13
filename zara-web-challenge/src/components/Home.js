@@ -76,6 +76,8 @@ function Home(props) {
             filtered={filtered}
             searchText={searchText}
             setSearchText={setSearchText}
+            isFavoritesActive={isFavoritesActive} // Propiedad añadida
+            favoritesCounter={favoritesCounter} // Propiedad añadida
           />
         </div>
         {filtered.length > 0 ? (

@@ -3,29 +3,41 @@ import SearchIcon from "../../assets/search-icon.png";
 
 const componentName = "SearchBar-";
 
-function SearchBar({ data, setFiltered, searchText, setSearchText }) {
+function SearchBar({
+  data,
+  setFiltered,
+  searchText,
+  setSearchText,
+  isFavoritesActive,
+  favoritesCounter,
+}) {
   const [query, setQuery] = useState(searchText);
-  const [filtered, setFilteredResults] = useState([]); // Definimos el estado de filtered
+  const [filtered, setFilteredResults] = useState([]);
 
   useEffect(() => {
     setQuery(searchText);
-  }, [searchText]);
+    filterData(searchText);
+  }, [searchText, data, setFiltered, isFavoritesActive]);
 
   const handleChange = (event) => {
     const valor = event.target.value;
     setQuery(valor);
     setSearchText(valor);
+    filterData(valor);
+  };
 
-    // Filtramos los datos basados en el valor de búsqueda
-    const filteredData = data.filter((item) =>
-      item.name.toLowerCase().includes(valor.toLowerCase())
-    );
-
-    // Actualizamos el estado de filtered
-    setFilteredResults(filteredData);
-
-    // Llamamos a la función setFiltered pasándole los datos filtrados
-    setFiltered(filteredData);
+  const filterData = (searchText) => {
+    if (isFavoritesActive) {
+      // Cuando los favoritos están activos, no es necesario filtrar los datos
+      setFilteredResults(data);
+    } else {
+      // Cuando los favoritos no están activos, filtramos los datos según el texto de búsqueda
+      const filteredData = data.filter((item) =>
+        item.name.toLowerCase().includes(searchText.toLowerCase())
+      );
+      setFilteredResults(filteredData);
+      setFiltered(filteredData);
+    }
   };
 
   return (
@@ -50,7 +62,9 @@ function SearchBar({ data, setFiltered, searchText, setSearchText }) {
       </div>
       <div className={`${componentName}-search-count-container`}>
         <p className={`${componentName}-search-count`}>
-          {filtered.length === 1
+          {isFavoritesActive
+            ? `${favoritesCounter} favorites`
+            : filtered.length === 1
             ? `${filtered.length} result`
             : `${filtered.length} results`}
         </p>

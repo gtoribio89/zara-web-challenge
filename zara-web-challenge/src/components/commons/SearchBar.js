@@ -1,25 +1,31 @@
-// SearchBar.js
 import React, { useState, useEffect } from "react";
 import SearchIcon from "../../assets/search-icon.png";
 
 const componentName = "SearchBar-";
 
-function SearchBar({ data, setFiltered, filtered, searchText, setSearchText }) {
+function SearchBar({ data, setFiltered, searchText, setSearchText }) {
   const [query, setQuery] = useState(searchText);
+  const [filtered, setFilteredResults] = useState([]); // Definimos el estado de filtered
 
   useEffect(() => {
-    setQuery(searchText); // Actualizar el estado `query` cuando cambie el texto de búsqueda
+    setQuery(searchText);
   }, [searchText]);
 
   const handleChange = (event) => {
     const valor = event.target.value;
     setQuery(valor);
-    setSearchText(valor); // Actualizar el texto de búsqueda en el estado
+    setSearchText(valor);
 
-    const filtered = data.filter((item) =>
+    // Filtramos los datos basados en el valor de búsqueda
+    const filteredData = data.filter((item) =>
       item.name.toLowerCase().includes(valor.toLowerCase())
     );
-    setFiltered(filtered);
+
+    // Actualizamos el estado de filtered
+    setFilteredResults(filteredData);
+
+    // Llamamos a la función setFiltered pasándole los datos filtrados
+    setFiltered(filteredData);
   };
 
   return (

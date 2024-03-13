@@ -2,50 +2,60 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import Header from "./commons/Header";
 import { fetchCharacterData } from "../api/get-character";
-import { useFavorites } from "./commons/FavoritesContext";
 import FavIcon from "../assets/heart-default.png";
 import FavIconFilled from "../assets/heart-filled.png";
+import { useFavorites } from "./commons/FavoritesContext";
 
 const componentName = "ProductDetails-";
 
 function ProductDetails(props) {
   const { id } = useParams();
   const [data, setData] = useState(null);
-  const { favoritesCounter, updateFavoritesCounter } = useFavorites(); // Obtener el contador de favoritos del contexto
+  const { favoritesCounter, updateFavoritesCounter } = useFavorites();
+  const [favorites, setFavorites] = useState([]);
   const [isFavorite, setIsFavorite] = useState(false);
 
   useEffect(() => {
-    fetchCharacterData(id) // Pasar el ID como parámetro a la función de obtención de datos
+    fetchCharacterData(id)
       .then((data) => {
         setData(data);
       })
       .catch((error) => {
-        console.error("Error al obtener datos:", error);
+        console.error("Error fetching data:", error);
       });
-  }, [id]); // Agregar 'id' como dependencia para que se vuelva a buscar cuando cambie
+  }, [id]);
 
   useEffect(() => {
-    // Verificar si el personaje actual es un favorito
-    if (data && data.data && data.data.results) {
-      const favorite = localStorage.getItem(data.data.results[0].id);
-      setIsFavorite(favorite ? true : false);
-    }
-  }, [data]);
+    const favoritesFromStorage =
+      JSON.parse(localStorage.getItem("favorites")) || [];
+    setFavorites(favoritesFromStorage);
+    updateFavoritesCounter(favoritesFromStorage.length);
+
+    setIsFavorite(checkIsFavorite(id)); // Verificar si el elemento actual pertenece a favoritos
+  }, []);
 
   const toggleFavorite = () => {
-    if (!isFavorite) {
-      updateFavoritesCounter(favoritesCounter + 1); // Incrementar el contador de favoritos en el contexto
-      localStorage.setItem(data.data.results[0].id, true);
-    } else {
-      updateFavoritesCounter(favoritesCounter - 1); // Decrementar el contador de favoritos en el contexto
-      localStorage.removeItem(data.data.results[0].id);
-    }
-    setIsFavorite(!isFavorite);
+    const character = data.data.results[0];
+    const isCurrentlyFavorite = checkIsFavorite(id);
+
+    const updatedFavorites = isCurrentlyFavorite
+      ? favorites.filter((favorite) => favorite.id !== character.id)
+      : [...favorites, character];
+
+    setFavorites(updatedFavorites);
+    updateFavoritesCounter(updatedFavorites.length);
+    localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
+
+    setIsFavorite(!isCurrentlyFavorite); // Invertimos el estado actual
   };
 
-  // Verificar si data es null antes de acceder a sus propiedades
+  const checkIsFavorite = (id) => {
+    const favoriteIds = favorites.map((favorite) => favorite.id);
+    return favoriteIds.includes(parseInt(id)); // Convertir a entero para comparar
+  };
+
   if (!data || !data.data || !data.data.results) {
-    return null; // Si data es null, retornar null o cualquier otro componente de carga
+    return null;
   }
 
   return (
@@ -76,7 +86,7 @@ function ProductDetails(props) {
       >
         <img
           className={`${componentName}-favorites-icon`}
-          src={isFavorite ? FavIconFilled : FavIcon}
+          src={checkIsFavorite(id) ? FavIconFilled : FavIcon}
           alt="Favorites icon png"
         />
       </div>

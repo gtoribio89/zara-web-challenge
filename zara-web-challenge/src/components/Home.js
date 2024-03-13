@@ -3,18 +3,17 @@ import Header from "./commons/Header";
 import SearchBar from "./commons/SearchBar";
 import Card from "./commons/Card";
 import { fetchCharactersData } from "../api/get-characters";
-import { useFavorites } from "./commons/FavoritesContext"; // Importar el contexto de favoritos
+import { useFavorites } from "./commons/FavoritesContext";
 
 const componentName = "Home-";
 
 function Home(props) {
   const [data, setData] = useState(null);
   const [filtered, setFiltered] = useState([]);
-  const [favorites, setFavorites] = useState([]);
   const [searchText, setSearchText] = useState("");
   const [isFavoritesActive, setIsFavoritesActive] = useState(false);
 
-  const { favoritesCounter, updateFavoritesCounter } = useFavorites(); // Obtener el contador de favoritos del contexto
+  const { favoritesCounter, updateFavoritesCounter } = useFavorites();
 
   useEffect(() => {
     fetchCharactersData()
@@ -27,36 +26,42 @@ function Home(props) {
       });
   }, []);
 
-  const handleFilteredResults = (filteredResults) => {
-    setFiltered(filteredResults);
-    setIsFavoritesActive(false);
-  };
+  useEffect(() => {
+    if (isFavoritesActive) {
+      const favorites = JSON.parse(localStorage.getItem("favorites")) || [];
+      setFiltered(favorites);
+    } else {
+      const filteredResults = data
+        ? data.data.results.filter((item) =>
+            item.name.toLowerCase().includes(searchText.toLowerCase())
+          )
+        : [];
+      setFiltered(filteredResults);
+    }
+  }, [data, searchText, isFavoritesActive]);
 
   const handleToggleFavorite = (isFavorite, item) => {
-    if (isFavorite) {
-      setFavorites([...favorites, item]);
-      updateFavoritesCounter(favoritesCounter + 1); // Incrementar el contador de favoritos en el contexto
-    } else {
-      setFavorites(favorites.filter((favorite) => favorite.id !== item.id));
-      updateFavoritesCounter(favoritesCounter - 1); // Decrementar el contador de favoritos en el contexto
-    }
+    const favorites = JSON.parse(localStorage.getItem("favorites")) || [];
+    const updatedFavorites = isFavorite
+      ? [...favorites, item]
+      : favorites.filter((favorite) => favorite.id !== item.id);
+    localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
+    updateFavoritesCounter(updatedFavorites.length);
   };
 
-  const handleShowFavorites = () => {
-    setFiltered(favorites);
-    setIsFavoritesActive(true);
+  const handleShowFavorites = (isActive) => {
+    setIsFavoritesActive(isActive);
   };
 
   const handleClearSearchText = () => {
     setSearchText("");
-    setFiltered(data ? data.data.results : []);
-    setIsFavoritesActive(false); // Establecer isFavoritesActive a false al limpiar el texto de búsqueda
+    setIsFavoritesActive(false);
   };
 
   return (
     <div className="main-container">
       <Header
-        favoritesCounter={favoritesCounter} // Pasar el contador de favoritos del contexto
+        favoritesCounter={favoritesCounter}
         onShowFavorites={handleShowFavorites}
         clearSearchText={handleClearSearchText}
       />
@@ -67,7 +72,7 @@ function Home(props) {
         <div className={`${componentName}-searchbar-container`}>
           <SearchBar
             data={data ? data.data.results : []}
-            setFiltered={handleFilteredResults}
+            setFiltered={setFiltered}
             filtered={filtered}
             searchText={searchText}
             setSearchText={setSearchText}
@@ -79,9 +84,13 @@ function Home(props) {
               <Card
                 key={index}
                 data={item}
-                isFavorite={favorites.some(
-                  (favorite) => favorite.id === item.id
-                )}
+                isFavorite={
+                  localStorage.getItem("favorites")
+                    ? JSON.parse(localStorage.getItem("favorites")).some(
+                        (favorite) => favorite.id === item.id
+                      )
+                    : false
+                }
                 onToggleFavorite={(isFavorite) =>
                   handleToggleFavorite(isFavorite, item)
                 }

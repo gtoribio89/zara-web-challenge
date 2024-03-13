@@ -10,6 +10,7 @@ function Header(props) {
   const navigate = useNavigate();
 
   const handleLogoClick = () => {
+    navigate("/");
     if (typeof clearSearchText === "function") {
       clearSearchText();
     }
@@ -17,7 +18,7 @@ function Header(props) {
 
   const handleShowFavorites = () => {
     if (typeof onShowFavorites === "function") {
-      onShowFavorites();
+      onShowFavorites(true);
       navigate("/"); // Navegar a la ruta raíz después de mostrar favoritos
     }
   };

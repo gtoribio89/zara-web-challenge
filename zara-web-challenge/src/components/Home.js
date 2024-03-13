@@ -7,7 +7,7 @@ import { useFavorites } from "./commons/FavoritesContext";
 
 const componentName = "Home-";
 
-function Home(props) {
+function Home() {
   const [data, setData] = useState([]);
   const [filtered, setFiltered] = useState([]);
   const [searchText, setSearchText] = useState("");
@@ -33,7 +33,7 @@ function Home(props) {
   useEffect(() => {
     fetchCharactersData()
       .then((data) => {
-        setData(data);
+        setData(data.data.results);
         setFiltered(data.data.results);
       })
       .catch((error) => {

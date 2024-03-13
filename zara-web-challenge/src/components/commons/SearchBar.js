@@ -3,7 +3,14 @@ import SearchIcon from "../../assets/search-icon.png";
 
 const componentName = "SearchBar-";
 
-function SearchBar({ searchText, setSearchText, handleFilterData }) {
+function SearchBar({
+  searchText,
+  setSearchText,
+  handleFilterData,
+  filtered,
+  isFavoritesActive,
+  favoritesCounter,
+}) {
   const handleChange = (event) => {
     const value = event.target.value;
     setSearchText(value);
@@ -15,6 +22,8 @@ function SearchBar({ searchText, setSearchText, handleFilterData }) {
   useEffect(() => {
     memoizedHandleFilterData(searchText);
   }, [searchText, memoizedHandleFilterData]);
+
+  console.log(isFavoritesActive);
 
   return (
     <div className={`${componentName}-container`}>
@@ -35,6 +44,23 @@ function SearchBar({ searchText, setSearchText, handleFilterData }) {
             className={`${componentName}-search-bar`}
           />
         </div>
+      </div>
+      <div className={`${componentName}-search-count-container`}>
+        <p className={`${componentName}-search-count`}>
+          {isFavoritesActive ? (
+            <span>{favoritesCounter} favorites</span>
+          ) : filtered ? (
+            filtered.length > 0 ? (
+              <span>
+                {filtered.length} {filtered.length === 1 ? "result" : "results"}
+              </span>
+            ) : (
+              "No results"
+            )
+          ) : (
+            "Loading..."
+          )}
+        </p>
       </div>
     </div>
   );

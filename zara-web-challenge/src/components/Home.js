@@ -12,7 +12,6 @@ function Home() {
   const [filtered, setFiltered] = useState([]);
   const [searchText, setSearchText] = useState("");
   const [isFavoritesActive, setIsFavoritesActive] = useState(false);
-
   const { favoritesCounter, updateFavoritesCounter } = useFavorites();
 
   const handleFilterData = (searchText) => {
@@ -21,7 +20,6 @@ function Home() {
       setFiltered(favorites);
     } else {
       if (Array.isArray(data)) {
-        // Verifica que data sea un array
         const filteredResults = data.filter((item) =>
           item.name.toLowerCase().includes(searchText.toLowerCase())
         );
@@ -37,7 +35,7 @@ function Home() {
         setFiltered(data.data.results);
       })
       .catch((error) => {
-        console.error("Error al obtener datos:", error);
+        console.error("Error fetching data:", error);
       });
   }, []);
 
@@ -69,7 +67,7 @@ function Home() {
         favoritesCounter={favoritesCounter}
         onShowFavorites={handleShowFavorites}
         clearSearchText={handleClearSearchText}
-        isFavoritesActive={isFavoritesActive} // Agregar isFavoritesActive como prop
+        isFavoritesActive={isFavoritesActive}
       />
       <div className={`${componentName}-container`}>
         {isFavoritesActive && (
@@ -80,9 +78,12 @@ function Home() {
             searchText={searchText}
             setSearchText={setSearchText}
             handleFilterData={handleFilterData}
+            filtered={filtered}
+            isFavoritesActive={isFavoritesActive}
+            favoritesCounter={favoritesCounter}
           />
         </div>
-        {filtered.length > 0 ? (
+        {filtered && filtered.length > 0 ? (
           <div className={`${componentName}-product-list-container`}>
             {filtered.map((item, index) => (
               <Card
@@ -98,12 +99,12 @@ function Home() {
                 onToggleFavorite={(isFavorite) =>
                   handleToggleFavorite(isFavorite, item)
                 }
-                isFavoritesActive={isFavoritesActive} // Pasar isFavoritesActive como prop
+                isFavoritesActive={isFavoritesActive}
               />
             ))}
           </div>
         ) : (
-          <p>No se encontraron resultados.</p>
+          <p>No results found.</p>
         )}
       </div>
     </div>

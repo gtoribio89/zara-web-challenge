@@ -15,7 +15,10 @@ function Card(props) {
   return (
     <div className={`${componentName}-character-container`}>
       <div className={`${componentName}-character-image-container`}>
-        <Link className={`${componentName}-character-link`} to="/">
+        <Link
+          className={`${componentName}-character-link`}
+          to={`/character/${data.id}`}
+        >
           <img
             className={`${componentName}-character-image`}
             src={data.thumbnail.path + "." + data.thumbnail.extension}

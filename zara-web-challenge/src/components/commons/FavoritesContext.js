@@ -19,7 +19,7 @@ export const FavoritesProvider = ({ children }) => {
 
   const favoritesContextValue = {
     favoritesCounter,
-    updateFavoritesCounter, // Asegúrate de que updateFavoritesCounter esté disponible en el contexto
+    updateFavoritesCounter,
     clearFavoritesCounter,
   };
 

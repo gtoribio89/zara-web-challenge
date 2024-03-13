@@ -3,16 +3,18 @@ import Header from "./commons/Header";
 import SearchBar from "./commons/SearchBar";
 import Card from "./commons/Card";
 import { fetchCharactersData } from "../api/get-characters";
+import { useFavorites } from "./commons/FavoritesContext"; // Importar el contexto de favoritos
 
 const componentName = "Home-";
 
 function Home(props) {
   const [data, setData] = useState(null);
   const [filtered, setFiltered] = useState([]);
-  const [favoriteCount, setFavoriteCount] = useState(0);
   const [favorites, setFavorites] = useState([]);
   const [searchText, setSearchText] = useState("");
   const [isFavoritesActive, setIsFavoritesActive] = useState(false);
+
+  const { favoritesCounter, updateFavoritesCounter } = useFavorites(); // Obtener el contador de favoritos del contexto
 
   useEffect(() => {
     fetchCharactersData()
@@ -32,11 +34,11 @@ function Home(props) {
 
   const handleToggleFavorite = (isFavorite, item) => {
     if (isFavorite) {
-      setFavoriteCount((prevCount) => prevCount + 1);
       setFavorites([...favorites, item]);
+      updateFavoritesCounter(favoritesCounter + 1); // Incrementar el contador de favoritos en el contexto
     } else {
-      setFavoriteCount((prevCount) => prevCount - 1);
       setFavorites(favorites.filter((favorite) => favorite.id !== item.id));
+      updateFavoritesCounter(favoritesCounter - 1); // Decrementar el contador de favoritos en el contexto
     }
   };
 
@@ -45,17 +47,18 @@ function Home(props) {
     setIsFavoritesActive(true);
   };
 
-  const clearSearchText = () => {
+  const handleClearSearchText = () => {
     setSearchText("");
     setFiltered(data ? data.data.results : []);
+    setIsFavoritesActive(false); // Establecer isFavoritesActive a false al limpiar el texto de búsqueda
   };
 
   return (
     <div className="main-container">
       <Header
-        favoritesCounter={favoriteCount}
+        favoritesCounter={favoritesCounter} // Pasar el contador de favoritos del contexto
         onShowFavorites={handleShowFavorites}
-        clearSearchText={clearSearchText}
+        clearSearchText={handleClearSearchText}
       />
       <div className={`${componentName}-container`}>
         {isFavoritesActive && (

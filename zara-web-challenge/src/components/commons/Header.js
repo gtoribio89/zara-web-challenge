@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Logo from "../../assets/vector.png";
 import FavIcon from "../../assets/heart-filled.png";
 
@@ -7,6 +7,7 @@ const componentName = "Header-";
 
 function Header(props) {
   const { favoritesCounter, onShowFavorites, clearSearchText } = props;
+  const navigate = useNavigate();
 
   const handleLogoClick = () => {
     if (typeof clearSearchText === "function") {
@@ -17,6 +18,7 @@ function Header(props) {
   const handleShowFavorites = () => {
     if (typeof onShowFavorites === "function") {
       onShowFavorites();
+      navigate("/"); // Navegar a la ruta raíz después de mostrar favoritos
     }
   };
 

@@ -10,10 +10,16 @@
     letter-spacing: 0em;
     text-align: left;
     text-transform: uppercase;
+    @media (min-width: $medium) {
+      padding: 24px 48px 24px 48px;
+    }
   }
   .Home--searchbar-container {
     @media (min-width: $medium) {
       margin-top: 124px;
+      &.favorite-active {
+        margin-top: 0px;
+      }
     }
   }
   .Home--product-list-container {
@@ -35,6 +41,23 @@
     }
     @media (min-width: $x-large) {
       grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+    }
+  }
+  .Home--product-list-not-found-container {
+    padding: 12px 16px 12px 16px;
+    .Home--product-list-not-found {
+      margin: 0;
+      font-family: $font-family-primary;
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 19px;
+      letter-spacing: 0em;
+      text-align: left;
+      text-transform: uppercase;
+      border: none;
+    }
+    @media (min-width: $medium) {
+      padding: 12px 48px 12px 48px;
     }
   }
 }

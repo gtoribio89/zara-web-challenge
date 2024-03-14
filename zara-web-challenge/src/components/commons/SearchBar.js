@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from "react";
+import React, { useEffect } from "react";
 import SearchIcon from "../../assets/search-icon.png";
 
 const componentName = "SearchBar-";
@@ -16,14 +16,12 @@ function SearchBar({
     setSearchText(value);
   };
 
-  // Utilizamos useCallback para envolver handleFilterData y asegurarnos de que no cambie en cada renderizado
-  const memoizedHandleFilterData = useCallback(handleFilterData, []);
-
   useEffect(() => {
-    memoizedHandleFilterData(searchText);
-  }, [searchText, memoizedHandleFilterData]);
-
-  console.log(isFavoritesActive);
+    const filteredData = () => {
+      handleFilterData(searchText);
+    };
+    filteredData();
+  }, [searchText, handleFilterData]);
 
   return (
     <div className={`${componentName}-container`}>

@@ -1,70 +1,40 @@
-# Getting Started with Create React App
+## Uso
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+1. Descargar o clonar el repositorio desde: https://github.com/gtoribio89/zara-web-challenge.git
+2. Una vez ubicado en nuestro sistema debemos abrir un entorno de desarrollo o algún terminal y ejecutar "npm star" (por supuesto debemos asegurarnos primero de tener todas las herramientas necesarias para arracancar este proceso. Mas info en: https://nodejs.org/)
+3. Tras ejecutar el comando anterior debemos esperar a que se compile el código, tras esto podremos acceder a "http://localhost:3000/" atraves de nuestro navegador web (recuerda que el puerto puede variar según tu configuración).
+4. Con todo esto ya tenemos lo necesario para navegar por la aplicación.
 
-## Available Scripts
+## Estructura
 
-In the project directory, you can run:
+Si deseas contribuir a este proyecto, sigue estos pasos:
 
-### `npm start`
+1. El proyecto guarda el grueso de su código en el directorio "/src" ubicado en la raíz del proyecto.
+2. Ahora vamos a explicar las diferentes partes relevantes
+   index.js => archivo principal desde el que arranca la aplicación y el cual alberga el contexto del sistema de favoritos
+   /api => directorio que recoge los ficheros con las diferentes llamadas a la api de Marvel utilizadas en el proyecto
+   /aseets => directorio que recoge los elementos visuales del proyecto
+   /components => directorio que recoge los componentes del proyecto los cuales explicaremos en el siguiente apartado
+   /fonts => directorio que recoge las fuentes usadas en el proyecto
+   /styles => directorio que recoge los diferentes archivos scss así como la estructura de estos dividida por componentes y utilidades
+   /utils => directorio creado para albergar diferentes funcionalidades genericas, que en nuestro caso se limitan al archivo routes.js por el momento
+3. Componentes principales (Vistas): El proyecto se compone de dos vistas las cuales son:
+   Home.js => Componente que genera la raiz de la aplicación "/" y muestra el listado de personajes
+   ProductDetails.js => Componente que muestra la vista detallada del elemento selecionado
+4. Componentes de apoyo: los encontraremos en el directorio /commons
+   Card.js => Renderiza cada uno de los elementos redenderizados en el listado de Home.js
+   ComicItem.js => Renderiza cada uno de los comics del personaje selecionado en ProductDetails.js
+   FavoritesContext.js => Proporciona el contexto del sistema de favoritos
+   Header.js => Renderiza la cabecera de nuestra aplicación web, se llama en cada una de las vistas
+   SearchBar.js => Renderiza la barra de busqueda ubicada en Home.js
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Errores conocidos y margen de mejora
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+1. Sería buena idea implementar funcionalidad al componente SearchBar para que realice búsquedas cuando el filtro de favoritos esté activo.
+2. Existe un Bug que ocasiona que el filtro de favoritos no se active si nos encontramos en "/character/:id. Se ha reemplazado por la redirección a "/" únicamente, en espera de solucionar el problema.
+3. Restan por agregar herramientas de testing
+4. Los dots del carousel de ProductDetails deben mostrar una barra de scroll en lugar de dicho componente.
+5. Se podría implementar una funcionalidad para agregar una barra de "loading" para mostrar el progreso mientras llegan los datos.
+6. De obtener más elementos en el futuro en lugar de la limitación de 50 quizás se pudiera incluir un sistema de paginación.
+7. Quizás se podría implementar un sistema de login.
+8. Con el sistema de login se podría mostrar el listado de favoritos en una nueva vista independiente.

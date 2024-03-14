@@ -10,7 +10,6 @@ function Header(props) {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Agregar isFavoritesActive al destructuring
   const { isFavoritesActive } = props;
 
   const handleLogoClick = () => {
@@ -22,7 +21,6 @@ function Header(props) {
 
   const handleShowFavorites = () => {
     if (location.pathname === "/") {
-      // Solo activar onShowFavorites si no estamos en la página de favoritos y la función está definida
       if (!isFavoritesActive && typeof onShowFavorites === "function") {
         onShowFavorites(true);
       }

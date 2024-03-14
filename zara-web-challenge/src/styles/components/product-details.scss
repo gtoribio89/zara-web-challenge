@@ -56,6 +56,7 @@
           .ProductDetails--favorites-container {
             display: flex;
             align-items: center;
+            cursor: pointer;
             .ProductDetails--favorites-icon {
               width: 24px;
             }
@@ -104,6 +105,9 @@
       }
       .ProductDetails--info-slider-container {
         margin-top: 16px;
+        .slick-slider {
+          cursor: pointer;
+        }
       }
     }
   }

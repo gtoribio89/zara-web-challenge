@@ -7,16 +7,9 @@ export async function fetchCharactersData() {
 
   try {
     const response = await fetch(
-      API_URL +
-        "?ts=" +
-        TIMESTAMP +
-        "&apikey=" +
-        API_KEY +
-        "&hash=" +
-        HASH +
-        "&limit=" +
-        LIMIT
+      `${API_URL}?ts=${TIMESTAMP}&apikey=${API_KEY}&hash=${HASH}&limit=${LIMIT}`
     );
+
     if (!response.ok) {
       throw new Error("Error al obtener datos de la API");
     }

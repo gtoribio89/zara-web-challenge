@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Header from "./commons/Header";
 import SearchBar from "./commons/SearchBar";
 import Card from "./commons/Card";
@@ -14,7 +14,7 @@ function Home() {
   const [isFavoritesActive, setIsFavoritesActive] = useState(false);
   const { favoritesCounter, updateFavoritesCounter } = useFavorites();
 
-  const handleFilterData = (searchText) => {
+  const handleFilterData = useCallback(() => {
     if (isFavoritesActive) {
       const favorites = JSON.parse(localStorage.getItem("favorites")) || [];
       setFiltered(favorites);
@@ -26,7 +26,7 @@ function Home() {
         setFiltered(filteredResults);
       }
     }
-  };
+  }, [data, isFavoritesActive, searchText]);
 
   useEffect(() => {
     fetchCharactersData()
@@ -40,8 +40,8 @@ function Home() {
   }, []);
 
   useEffect(() => {
-    handleFilterData(searchText);
-  }, [searchText, isFavoritesActive]);
+    handleFilterData();
+  }, [handleFilterData]);
 
   const handleToggleFavorite = (isFavorite, item) => {
     const favorites = JSON.parse(localStorage.getItem("favorites")) || [];
@@ -73,7 +73,11 @@ function Home() {
         {isFavoritesActive && (
           <p className={`${componentName}-favorites-title`}>favorites</p>
         )}
-        <div className={`${componentName}-searchbar-container`}>
+        <div
+          className={`${componentName}-searchbar-container ${
+            isFavoritesActive ? "favorite-active" : ""
+          }`}
+        >
           <SearchBar
             searchText={searchText}
             setSearchText={setSearchText}
@@ -104,7 +108,11 @@ function Home() {
             ))}
           </div>
         ) : (
-          <p>No results found.</p>
+          <div className={`${componentName}-product-list-not-found-container`}>
+            <p className={`${componentName}-product-list-not-found`}>
+              No results found.
+            </p>
+          </div>
         )}
       </div>
     </div>

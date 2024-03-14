@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import Header from "./commons/Header";
 import { fetchCharacterData } from "../api/get-character";
@@ -13,7 +13,7 @@ import ComicItem from "./commons/ComicItem";
 
 const componentName = "ProductDetails-";
 
-function ProductDetails(props) {
+function ProductDetails() {
   const { id } = useParams();
   const [data, setData] = useState(null);
   const [dataComics, setDataComics] = useState(null);
@@ -21,24 +21,36 @@ function ProductDetails(props) {
   const [favorites, setFavorites] = useState([]);
   const [isFavorite, setIsFavorite] = useState(false);
 
+  const checkIsFavorite = useCallback(
+    (id) => {
+      const favoriteIds = favorites.map((favorite) => favorite.id);
+      return favoriteIds.includes(parseInt(id));
+    },
+    [favorites]
+  );
+
   useEffect(() => {
-    fetchCharacterData(id)
-      .then((data) => {
-        setData(data);
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
+    const fetchData = async () => {
+      try {
+        const characterData = await fetchCharacterData(id);
+        setData(characterData);
+      } catch (error) {
+        console.error("Error fetching character data:", error);
+      }
+    };
+    fetchData();
   }, [id]);
 
   useEffect(() => {
-    fetchCharacterComicData(id)
-      .then((dataComics) => {
-        setDataComics(dataComics);
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
+    const fetchComicsData = async () => {
+      try {
+        const comicsData = await fetchCharacterComicData(id);
+        setDataComics(comicsData);
+      } catch (error) {
+        console.error("Error fetching comics data:", error);
+      }
+    };
+    fetchComicsData();
   }, [id]);
 
   useEffect(() => {
@@ -47,11 +59,11 @@ function ProductDetails(props) {
     setFavorites(favoritesFromStorage);
     updateFavoritesCounter(favoritesFromStorage.length);
 
-    setIsFavorite(checkIsFavorite(id)); // Verificar si el elemento actual pertenece a favoritos
-  }, []);
+    setIsFavorite(checkIsFavorite(id));
+  }, [id, favorites, updateFavoritesCounter, checkIsFavorite]);
 
   const toggleFavorite = () => {
-    const character = data.data.results[0];
+    const character = data?.data?.results[0];
     const isCurrentlyFavorite = checkIsFavorite(id);
 
     const updatedFavorites = isCurrentlyFavorite
@@ -59,49 +71,42 @@ function ProductDetails(props) {
       : [...favorites, character];
 
     setFavorites(updatedFavorites);
-    updateFavoritesCounter(updatedFavorites.length);
     localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
 
-    setIsFavorite(!isCurrentlyFavorite); // Invertimos el estado actual
-  };
-
-  const checkIsFavorite = (id) => {
-    const favoriteIds = favorites.map((favorite) => favorite.id);
-    return favoriteIds.includes(parseInt(id)); // Convertir a entero para comparar
+    updateFavoritesCounter(updatedFavorites.length);
+    setIsFavorite(!isCurrentlyFavorite);
   };
 
   const getYearFromDate = (dateString) => {
     const date = new Date(dateString);
-    const year = date.getFullYear();
-
-    return year;
+    return date.getFullYear();
   };
 
   const carouselSettings = {
     dots: true,
     infinite: true,
     speed: 500,
-    slidesToShow: 5, // Por defecto 2 elementos
+    slidesToShow: 5,
     slidesToScroll: 1,
     responsive: [
       {
-        breakpoint: 576, // Hasta 576px
+        breakpoint: 576,
         settings: {
-          slidesToShow: 2, // Mostrar 2 elementos
+          slidesToShow: 2,
           slidesToScroll: 1,
         },
       },
       {
-        breakpoint: 768, // Desde 577px hasta 768px
+        breakpoint: 768,
         settings: {
-          slidesToShow: 3, // Mostrar 3 elementos
+          slidesToShow: 3,
           slidesToScroll: 1,
         },
       },
       {
-        breakpoint: 922, // Desde 769px hasta 922px
+        breakpoint: 922,
         settings: {
-          slidesToShow: 5, // Mostrar 5 elementos
+          slidesToShow: 5,
           slidesToScroll: 1,
         },
       },
@@ -129,28 +134,29 @@ function ProductDetails(props) {
     return null;
   }
 
+  const character = data.data.results[0];
+  const characterThumbnail = character.thumbnail;
+  const characterName = character.name;
+  const characterDescription = character.description;
+
   return (
     <div className="main-container">
-      {<Header favoritesCounter={favoritesCounter} />}
+      <Header favoritesCounter={favoritesCounter} />
       <div className={`${componentName}-container`}>
         <div className={`${componentName}-main-container`}>
           <div className={`${componentName}-main-layout`}>
             <div className={`${componentName}-character-image-container`}>
               <img
                 className={`${componentName}-character-image`}
-                src={
-                  data.data.results[0].thumbnail.path +
-                  "." +
-                  data.data.results[0].thumbnail.extension
-                }
-                alt={"image of " + data.name}
+                src={`${characterThumbnail.path}.${characterThumbnail.extension}`}
+                alt={characterName}
               />
             </div>
             <div className={`${componentName}-character-info-container`}>
               <div className={`${componentName}-title-container`}>
                 <div className={`${componentName}-title`}>
                   <p className={`${componentName}-title-content`}>
-                    {data.data.results[0].name}
+                    {characterName}
                   </p>
                 </div>
                 <div
@@ -159,14 +165,14 @@ function ProductDetails(props) {
                 >
                   <img
                     className={`${componentName}-favorites-icon`}
-                    src={checkIsFavorite(id) ? FavIconFilled : FavIcon}
-                    alt="Favorites icon png"
+                    src={isFavorite ? FavIconFilled : FavIcon}
+                    alt="Favorites icon"
                   />
                 </div>
               </div>
               <div className={`${componentName}-description-container`}>
                 <p className={`${componentName}-description-content`}>
-                  {data.data.results[0].description}
+                  {characterDescription}
                 </p>
               </div>
             </div>
@@ -174,7 +180,7 @@ function ProductDetails(props) {
         </div>
         <div className={`${componentName}-info-container`}>
           <div className={`${componentName}-info-layout`}>
-            <div className={`${componentName}-info-title-conatiner`}>
+            <div className={`${componentName}-info-title-container`}>
               <p className={`${componentName}-info-title-content`}>comics</p>
             </div>
             <div className={`${componentName}-info-slider-container`}>

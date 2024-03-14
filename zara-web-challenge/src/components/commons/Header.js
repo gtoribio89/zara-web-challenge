@@ -1,6 +1,5 @@
-// Header.js
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import Logo from "../../assets/vector.png";
 import FavIcon from "../../assets/heart-filled.png";
 
@@ -8,10 +7,27 @@ const componentName = "Header-";
 
 function Header(props) {
   const { favoritesCounter, onShowFavorites, clearSearchText } = props;
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  // Agregar isFavoritesActive al destructuring
+  const { isFavoritesActive } = props;
 
   const handleLogoClick = () => {
+    navigate("/");
     if (typeof clearSearchText === "function") {
-      clearSearchText(); // Limpiar el texto de búsqueda
+      clearSearchText();
+    }
+  };
+
+  const handleShowFavorites = () => {
+    if (location.pathname === "/") {
+      // Solo activar onShowFavorites si no estamos en la página de favoritos y la función está definida
+      if (!isFavoritesActive && typeof onShowFavorites === "function") {
+        onShowFavorites(true);
+      }
+    } else {
+      navigate("/");
     }
   };
 
@@ -32,7 +48,7 @@ function Header(props) {
       </div>
       <div
         className={`${componentName}-favorites-wrapper`}
-        onClick={onShowFavorites}
+        onClick={handleShowFavorites}
       >
         <img
           className={`${componentName}-favorites-icon`}

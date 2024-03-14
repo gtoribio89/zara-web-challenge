@@ -1,0 +1,39 @@
+.ComicItem--container {
+  margin-right: 16px;
+  .ComicItem--image-container {
+    display: flex;
+    max-width: 100%;
+    overflow-x: auto;
+    white-space: nowrap;
+    .ComicItem--character-image {
+      max-width: 100%;
+      height: auto;
+    }
+  }
+  .ComicItem--info-container {
+    .ComicItem--title-container {
+      margin-top: 16px;
+      .ComicItem--title {
+        margin: 0;
+        font-family: $font-family-primary;
+        font-size: 16px;
+        font-weight: 500;
+        line-height: 19px;
+        letter-spacing: 0em;
+        text-align: left;
+      }
+    }
+    .ComicItem--year-container {
+      margin-top: 16px;
+      .ComicItem--year {
+        margin: 0;
+        font-family: $font-family-primary;
+        font-size: 12px;
+        font-weight: 400;
+        line-height: 14px;
+        letter-spacing: 0em;
+        text-align: left;
+      }
+    }
+  }
+}

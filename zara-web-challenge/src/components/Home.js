@@ -1,62 +1,73 @@
-// Home.js
 import React, { useState, useEffect } from "react";
 import Header from "./commons/Header";
 import SearchBar from "./commons/SearchBar";
 import Card from "./commons/Card";
-import { fetchData } from "../api";
+import { fetchCharactersData } from "../api/get-characters";
+import { useFavorites } from "./commons/FavoritesContext";
 
 const componentName = "Home-";
 
-function Home(props) {
-  const [data, setData] = useState(null);
+function Home() {
+  const [data, setData] = useState([]);
   const [filtered, setFiltered] = useState([]);
-  const [favoriteCount, setFavoriteCount] = useState(0);
-  const [favorites, setFavorites] = useState([]);
   const [searchText, setSearchText] = useState("");
   const [isFavoritesActive, setIsFavoritesActive] = useState(false);
+  const { favoritesCounter, updateFavoritesCounter } = useFavorites();
 
-  useEffect(() => {
-    fetchData()
-      .then((data) => {
-        setData(data);
-        setFiltered(data.data.results);
-      })
-      .catch((error) => {
-        console.error("Error al obtener datos:", error);
-      });
-  }, []);
-
-  const handleFilteredResults = (filteredResults) => {
-    setFiltered(filteredResults);
-    setIsFavoritesActive(false); // Desactivar el filtro de favoritos al cambiar los filtros
-  };
-
-  const handleToggleFavorite = (isFavorite, item) => {
-    if (isFavorite) {
-      setFavoriteCount((prevCount) => prevCount + 1);
-      setFavorites([...favorites, item]);
+  const handleFilterData = (searchText) => {
+    if (isFavoritesActive) {
+      const favorites = JSON.parse(localStorage.getItem("favorites")) || [];
+      setFiltered(favorites);
     } else {
-      setFavoriteCount((prevCount) => prevCount - 1);
-      setFavorites(favorites.filter((favorite) => favorite.id !== item.id));
+      if (Array.isArray(data)) {
+        const filteredResults = data.filter((item) =>
+          item.name.toLowerCase().includes(searchText.toLowerCase())
+        );
+        setFiltered(filteredResults);
+      }
     }
   };
 
-  const handleShowFavorites = () => {
-    setFiltered(favorites);
-    setIsFavoritesActive(true); // Activar el filtro de favoritos
+  useEffect(() => {
+    fetchCharactersData()
+      .then((data) => {
+        setData(data.data.results);
+        setFiltered(data.data.results);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+  }, []);
+
+  useEffect(() => {
+    handleFilterData(searchText);
+  }, [searchText, isFavoritesActive]);
+
+  const handleToggleFavorite = (isFavorite, item) => {
+    const favorites = JSON.parse(localStorage.getItem("favorites")) || [];
+    const updatedFavorites = isFavorite
+      ? [...favorites, item]
+      : favorites.filter((favorite) => favorite.id !== item.id);
+    localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
+    updateFavoritesCounter(updatedFavorites.length);
   };
 
-  const clearSearchText = () => {
+  const handleShowFavorites = (isActive) => {
+    setIsFavoritesActive(isActive);
+  };
+
+  const handleClearSearchText = () => {
     setSearchText("");
-    setFiltered(data ? data.data.results : []); // Resetear los filtros de búsqueda
+    setIsFavoritesActive(false);
   };
 
   return (
     <div className="main-container">
       <Header
-        favoritesCounter={favoriteCount}
+        favoritesCounter={favoritesCounter}
         onShowFavorites={handleShowFavorites}
-        clearSearchText={clearSearchText}
+        clearSearchText={handleClearSearchText}
+        isFavoritesActive={isFavoritesActive}
       />
       <div className={`${componentName}-container`}>
         {isFavoritesActive && (
@@ -64,30 +75,36 @@ function Home(props) {
         )}
         <div className={`${componentName}-searchbar-container`}>
           <SearchBar
-            data={data ? data.data.results : []}
-            setFiltered={handleFilteredResults}
-            filtered={filtered}
             searchText={searchText}
             setSearchText={setSearchText}
+            handleFilterData={handleFilterData}
+            filtered={filtered}
+            isFavoritesActive={isFavoritesActive}
+            favoritesCounter={favoritesCounter}
           />
         </div>
-        {filtered.length > 0 ? (
+        {filtered && filtered.length > 0 ? (
           <div className={`${componentName}-product-list-container`}>
             {filtered.map((item, index) => (
               <Card
                 key={index}
                 data={item}
-                isFavorite={favorites.some(
-                  (favorite) => favorite.id === item.id
-                )}
+                isFavorite={
+                  localStorage.getItem("favorites")
+                    ? JSON.parse(localStorage.getItem("favorites")).some(
+                        (favorite) => favorite.id === item.id
+                      )
+                    : false
+                }
                 onToggleFavorite={(isFavorite) =>
                   handleToggleFavorite(isFavorite, item)
                 }
+                isFavoritesActive={isFavoritesActive}
               />
             ))}
           </div>
         ) : (
-          <p>No se encontraron resultados.</p>
+          <p>No results found.</p>
         )}
       </div>
     </div>

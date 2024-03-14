@@ -1,26 +1,29 @@
-// SearchBar.js
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useCallback } from "react";
 import SearchIcon from "../../assets/search-icon.png";
 
 const componentName = "SearchBar-";
 
-function SearchBar({ data, setFiltered, filtered, searchText, setSearchText }) {
-  const [query, setQuery] = useState(searchText);
+function SearchBar({
+  searchText,
+  setSearchText,
+  handleFilterData,
+  filtered,
+  isFavoritesActive,
+  favoritesCounter,
+}) {
+  const handleChange = (event) => {
+    const value = event.target.value;
+    setSearchText(value);
+  };
+
+  // Utilizamos useCallback para envolver handleFilterData y asegurarnos de que no cambie en cada renderizado
+  const memoizedHandleFilterData = useCallback(handleFilterData, []);
 
   useEffect(() => {
-    setQuery(searchText); // Actualizar el estado `query` cuando cambie el texto de búsqueda
-  }, [searchText]);
+    memoizedHandleFilterData(searchText);
+  }, [searchText, memoizedHandleFilterData]);
 
-  const handleChange = (event) => {
-    const valor = event.target.value;
-    setQuery(valor);
-    setSearchText(valor); // Actualizar el texto de búsqueda en el estado
-
-    const filtered = data.filter((item) =>
-      item.name.toLowerCase().includes(valor.toLowerCase())
-    );
-    setFiltered(filtered);
-  };
+  console.log(isFavoritesActive);
 
   return (
     <div className={`${componentName}-container`}>
@@ -36,7 +39,7 @@ function SearchBar({ data, setFiltered, filtered, searchText, setSearchText }) {
           <input
             type="text"
             placeholder="search a character..."
-            value={query}
+            value={searchText}
             onChange={handleChange}
             className={`${componentName}-search-bar`}
           />
@@ -44,9 +47,19 @@ function SearchBar({ data, setFiltered, filtered, searchText, setSearchText }) {
       </div>
       <div className={`${componentName}-search-count-container`}>
         <p className={`${componentName}-search-count`}>
-          {filtered.length === 1
-            ? `${filtered.length} result`
-            : `${filtered.length} results`}
+          {isFavoritesActive ? (
+            <span>{favoritesCounter} favorites</span>
+          ) : filtered ? (
+            filtered.length > 0 ? (
+              <span>
+                {filtered.length} {filtered.length === 1 ? "result" : "results"}
+              </span>
+            ) : (
+              "No results"
+            )
+          ) : (
+            "Loading..."
+          )}
         </p>
       </div>
     </div>

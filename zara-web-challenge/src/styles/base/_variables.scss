@@ -1,8 +1,15 @@
 $primary: #000000;
 $secondary: #ffffff;
+$gray-01: #333333;
 $brand-main: #ec1d24;
 
 $font-family-primary: "Roboto Condensed", sans-serif;
+
+@font-face {
+  font-family: "Roboto Condensed";
+  src: url("../../fonts/RobotoCondensed-VariableFont_wght.ttf")
+    format("truetype");
+}
 
 $small: 576px;
 $medium: 768px;
